@@ -1,0 +1,7 @@
+{
+    "go.testEnvVars": {
+    
+    },
+    "go.coverOnSingleTest": true,
+    "go.coverOnSingleTestFile": true
+}

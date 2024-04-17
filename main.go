@@ -8,6 +8,7 @@ import (
 	"github.com/Wordyka/SimpleBank/db/util"
 	db "github.com/Wordyka/SimpleBank/db/sqlc"
 	_ "github.com/lib/pq"
+	__ "github.com/golang/mock/mockgen/model"
 )
 
 func main() {
