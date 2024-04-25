@@ -6,7 +6,7 @@ import (
 
 	"github.com/Wordyka/SimpleBank/api"
 	db "github.com/Wordyka/SimpleBank/db/sqlc"
-	"github.com/Wordyka/SimpleBank/db/util"
+	"github.com/Wordyka/SimpleBank/util"
 	_ "github.com/lib/pq"
 )
 
@@ -18,13 +18,13 @@ func main() {
 
 	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
-		log.Fatal("Cannot connect to db:", err)
+		log.Fatal("cannot connect to db:", err)
 	}
 
 	store := db.NewStore(conn)
-	server,err := api.NewServer(config, store)
-	if err!=nil {
-		log.Fatal("cannot create server:",err)
+	server, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
 	}
 
 	err = server.Start(config.ServerAddress)
@@ -32,4 +32,3 @@ func main() {
 		log.Fatal("cannot start server:", err)
 	}
 }
-
