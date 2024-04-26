@@ -6,16 +6,16 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	db "github.com/Wordyka/SimpleBank/db/sqlc"
 	"github.com/Wordyka/SimpleBank/token"
-	"github.com/gin-gonic/gin"
 )
 
 type transferRequest struct {
 	FromAccountID int64  `json:"from_account_id" binding:"required,min=1"`
 	ToAccountID   int64  `json:"to_account_id" binding:"required,min=1"`
-	Amount        int    `json:"amount" binding:"required,gt=0"`
-	Currency      string `json:"currency" binding:"required,oneof=USD EUR IDR"`
+	Amount        int64  `json:"amount" binding:"required,gt=0"`
+	Currency      string `json:"currency" binding:"required,currency"`
 }
 
 func (server *Server) createTransfer(ctx *gin.Context) {
@@ -26,20 +26,18 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 	}
 
 	fromAccount, valid := server.validAccount(ctx, req.FromAccountID, req.Currency)
-
 	if !valid {
 		return
 	}
 
 	authPayload := ctx.MustGet(authorizationPayloadKey).(*token.Payload)
 	if fromAccount.Owner != authPayload.Username {
-		err := errors.New("From account doesn't belong to the authenticated user")
+		err := errors.New("from account doesn't belong to the authenticated user")
 		ctx.JSON(http.StatusUnauthorized, errorResponse(err))
 		return
 	}
 
 	_, valid = server.validAccount(ctx, req.ToAccountID, req.Currency)
-
 	if !valid {
 		return
 	}
@@ -47,7 +45,7 @@ func (server *Server) createTransfer(ctx *gin.Context) {
 	arg := db.TransferTxParams{
 		FromAccountID: req.FromAccountID,
 		ToAccountID:   req.ToAccountID,
-		Amount:        int64(req.Amount),
+		Amount:        req.Amount,
 	}
 
 	result, err := server.store.TransferTx(ctx, arg)
@@ -66,6 +64,7 @@ func (server *Server) validAccount(ctx *gin.Context, accountID int64, currency s
 			ctx.JSON(http.StatusNotFound, errorResponse(err))
 			return account, false
 		}
+
 		ctx.JSON(http.StatusInternalServerError, errorResponse(err))
 		return account, false
 	}

@@ -5,20 +5,19 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Wordyka/SimpleBank/db/util"
 	"github.com/stretchr/testify/require"
+	"github.com/Wordyka/SimpleBank/util"
 )
 
 func createRandomUser(t *testing.T) User {
 	hashedPassword, err := util.HashPassword(util.RandomString(6))
-	require.NoError(t,err)
-	
+	require.NoError(t, err)
 
 	arg := CreateUserParams{
-		Username:    util.RandomOwner(),
-		HashedPassword:  hashedPassword,
-		FullName: util.RandomOwner(),
-		Email: util.RandomEmail(),
+		Username:       util.RandomOwner(),
+		HashedPassword: hashedPassword,
+		FullName:       util.RandomOwner(),
+		Email:          util.RandomEmail(),
 	}
 
 	user, err := testQueries.CreateUser(context.Background(), arg)
@@ -29,8 +28,6 @@ func createRandomUser(t *testing.T) User {
 	require.Equal(t, arg.HashedPassword, user.HashedPassword)
 	require.Equal(t, arg.FullName, user.FullName)
 	require.Equal(t, arg.Email, user.Email)
-
-	// require.True(t, user.PasswordChangedAt.IsZero())
 	require.NotZero(t, user.CreatedAt)
 
 	return user
@@ -41,7 +38,6 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestGetUser(t *testing.T) {
-	// create user
 	user1 := createRandomUser(t)
 	user2, err := testQueries.GetUser(context.Background(), user1.Username)
 	require.NoError(t, err)

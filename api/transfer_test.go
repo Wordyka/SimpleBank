@@ -9,13 +9,13 @@ import (
 	"testing"
 	"time"
 
-	mockdb "github.com/Wordyka/SimpleBank/db/mock"
-	db "github.com/Wordyka/SimpleBank/db/sqlc"
-	"github.com/Wordyka/SimpleBank/db/util"
-	"github.com/Wordyka/SimpleBank/token"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
+	mockdb "github.com/Wordyka/SimpleBank/db/mock"
+	db "github.com/Wordyka/SimpleBank/db/sqlc"
+	"github.com/Wordyka/SimpleBank/token"
+	"github.com/Wordyka/SimpleBank/util"
 )
 
 func TestTransferAPI(t *testing.T) {
@@ -253,6 +253,7 @@ func TestTransferAPI(t *testing.T) {
 			buildStubs: func(store *mockdb.MockStore) {
 				store.EXPECT().GetAccount(gomock.Any(), gomock.Eq(account1.ID)).Times(1).Return(account1, nil)
 				store.EXPECT().GetAccount(gomock.Any(), gomock.Eq(account2.ID)).Times(1).Return(account2, nil)
+				store.EXPECT().TransferTx(gomock.Any(), gomock.Any()).Times(1).Return(db.TransferTxResult{}, sql.ErrTxDone)
 			},
 			checkResponse: func(recorder *httptest.ResponseRecorder) {
 				require.Equal(t, http.StatusInternalServerError, recorder.Code)

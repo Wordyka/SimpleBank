@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Wordyka/SimpleBank/token"
 	"github.com/gin-gonic/gin"
+	"github.com/Wordyka/SimpleBank/token"
 )
 
 const (
