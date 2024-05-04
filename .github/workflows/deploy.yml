@@ -9,8 +9,7 @@ on:
 
 jobs:
 
-
-  test:
+  build:
     name: Build image
     runs-on: ubuntu-latest
         
