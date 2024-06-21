@@ -24,7 +24,11 @@ require (
 	github.com/ugorji/go/codec v1.2.12 // indirect
 	golang.org/x/arch v0.7.0 // indirect
 	golang.org/x/net v0.24.0 // indirect
-	google.golang.org/protobuf v1.33.0 // indirect
+	google.golang.org/protobuf v1.33.0
 )
 
-require github.com/stretchr/testify v1.9.0
+require (
+	github.com/golang/protobuf v1.5.3
+	github.com/stretchr/testify v1.9.0
+	google.golang.org/grpc v1.59.0
+)

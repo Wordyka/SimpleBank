@@ -3,5 +3,10 @@
     
     },
     "go.coverOnSingleTest": true,
-    "go.coverOnSingleTestFile": true
+    "go.coverOnSingleTestFile": true,
+    "protoc": {
+        "options": [
+            "--proto_path=proto",
+        ]
+    }
 }
